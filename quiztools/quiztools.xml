@@ -4,12 +4,12 @@
         <description>Quiz management package</description>
         <element>pkg_quiztools</element>
         <type>package</type>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
         <client>site</client>
         <downloads>
-            <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools/releases/download/1.2.2/pkg_quiztools_1.2.2.zip</downloadurl>
+            <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools/releases/download/1.2.3/pkg_quiztools_1.2.3.zip</downloadurl>
         </downloads>
-        <sha256>01092eb7f7c67967c2728636f46cf1212ff6165822f32e564ffb6e81c7111f20</sha256>
+        <sha256>1473dc0aa8b81cca2aae1c03cca0131c216f5677a7943b254a82238129ea4800</sha256>
         <maintainerurl>https://github.com/fsvblr/quiztools</maintainerurl>
         <targetplatform name="joomla" version="((5\.4)|(6\.(0|1)))" />
         <php_minimum>8.1</php_minimum>
