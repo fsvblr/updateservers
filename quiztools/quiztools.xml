@@ -9,7 +9,7 @@
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools/releases/download/1.3.0/pkg_quiztools_1.3.0.zip</downloadurl>
         </downloads>
-        <sha256>5b611fb933f7016582069f25aa5bc6422061a52c5cfb73a2bbfe341f0e97409f</sha256>
+        <sha256>700178a45c5b44ce3fd7e145a8dd3d6207a2dcb67adde6aa556be7e1150ec2e2</sha256>
         <maintainerurl>https://github.com/fsvblr/quiztools</maintainerurl>
         <targetplatform name="joomla" version="((5\.4)|(6\.(0|1)))" />
         <php_minimum>8.1</php_minimum>
