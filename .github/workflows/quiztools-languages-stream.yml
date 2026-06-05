@@ -1,0 +1,110 @@
+name: Update Joomla Language Server
+
+on:
+  repository_dispatch:
+    types: [language_updated] # Ловит событие из первого репозитория
+
+permissions:
+  contents: write
+
+jobs:
+  update_xml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update XML using Python
+        shell: python
+        run: |
+          import os
+          import xml.etree.ElementTree as ET
+          from xml.dom import minidom
+
+          # Данные, прилетевшие из первого репозитория
+          lang = "${{ github.event.client_payload.lang }}"
+          version = "${{ github.event.client_payload.version }}"
+          url = "${{ github.event.client_payload.url }}"
+          sha256 = "${{ github.event.client_payload.sha256 }}"
+
+          file_path = "quiztools-languages/quiztools-languages.xml"
+          
+          # Читаем XML файл
+          tree = ET.parse(file_path)
+          root = tree.getroot()
+          
+          # Ищем существующий блок обновления для этого языка по тегу <element>
+          update_element = None
+          for update in root.findall('update'):
+              element_tag = update.find('element')
+              if element_tag is not None and element_tag.text == lang:
+                  update_element = update
+                  break
+          
+          # Если блок языка найден, обновляем его данные
+          if update_element is not None:
+              update_element.find('version').text = version
+              update_element.find('downloads').find('downloadurl').text = url
+              
+              # SHA-256 может отсутствовать при первой разметке, проверяем или создаем
+              sha_tag = update_element.find('sha256')
+              if sha_tag is not None:
+                  sha_tag.text = sha256
+              else:
+                  new_sha = ET.SubElement(update_element, 'sha256')
+                  new_sha.text = sha256
+              print(f"Updated existing entry for {lang}")
+          
+          # Если языка еще нет в XML, динамически создаем весь блок с нуля
+          else:
+              new_update = ET.SubElement(root, 'update')
+              
+              name = ET.SubElement(new_update, 'name')
+              name.text = f"QuizTools Language Pack - {lang}"
+              
+              desc = ET.SubElement(new_update, 'description')
+              desc.text = f"{lang} translation for QuizTools package"
+              
+              elem = ET.SubElement(new_update, 'element')
+              elem.text = lang
+              
+              type_tag = ET.SubElement(new_update, 'type')
+              type_tag.text = "language"
+              
+              client = ET.SubElement(new_update, 'client')
+              client.text = "site"
+              
+              ver = ET.SubElement(new_update, 'version')
+              ver.text = version
+              
+              downloads = ET.SubElement(new_update, 'downloads')
+              downloadurl = ET.SubElement(downloads, 'downloadurl', type="full", format="zip")
+              downloadurl.text = url
+              
+              tags = ET.SubElement(new_update, 'tags')
+              tag = ET.SubElement(tags, 'tag')
+              tag.text = "stable"
+              
+              target = ET.SubElement(new_update, 'targetplatform', name="joomla", version="((5\\.4)|(6\.(0|1)))")
+              
+              sha = ET.SubElement(new_update, 'sha256')
+              sha.text = sha256
+              print(f"Created new entry for {lang}")
+
+          # Сохраняем XML с красивыми отступами (Pretty Print)
+          xml_str = ET.tostring(root, encoding='utf-8')
+          parsed_str = minidom.parseString(xml_str)
+          
+          # Убираем лишние пустые строки, которые может плодить minidom
+          pretty_xml = "\n".join([line for line in parsed_str.toprettyxml(indent="    ").splitlines() if line.strip()])
+          
+          with open(file_path, "w", encoding="utf-8") as f:
+              f.write(pretty_xml)
+
+      - name: Commit & Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add quiztools-languages/quiztools-languages.xml
+          git commit -m "Automated update for language: ${{ github.event.client_payload.lang }} to v${{ github.event.client_payload.url }}" || echo "No changes to commit"
+          git push
