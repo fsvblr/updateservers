@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>QuizTools Language Pack - French (fr-FR)</name>
+        <description>French translation for QuizTools package</description>
+        <element>fr-FR</element>
+        <type>language</type>
+        <client>site</client>
+        <version>2026.01.01</version>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/quiztools-languages/releases/download/fr-FR-2026.01.01/pkg_quiztools_fr-FR_2026.01.01.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <targetplatform name="joomla" version="((5\.4)|(6\.(0|1)))" />
+        <sha256>1234567890</sha256>
+    </update>
+</updates>
