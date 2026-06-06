@@ -1,4 +1,4 @@
-name: Update Joomla Language Server
+name: Update QuizTools Language Server
 
 on:
   repository_dispatch:
