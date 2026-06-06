@@ -2,7 +2,7 @@ name: Update QuizTools Language Server
 
 on:
   repository_dispatch:
-    types: [language_updated] # Ловит событие из первого репозитория
+    types: [quiztools_language_updated] # Ловит событие из первого репозитория
 
 permissions:
   contents: write
