@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <updates>
     <update>
-        <name>QuizTools Language Pack - French (fr-FR)</name>
-        <description>French translation for QuizTools package</description>
+        <name>QuizTools Language Pack - fr-FR</name>
+        <description>fr-FR translation for QuizTools package</description>
         <element>fr-FR</element>
         <type>language</type>
         <client>site</client>
