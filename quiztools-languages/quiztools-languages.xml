@@ -13,7 +13,7 @@
         <tags>
             <tag>stable</tag>
         </tags>
-        <targetplatform name="joomla" version="((5\.4)|(6\.(0|1)))"/>
+        <targetplatform name="joomla" version="((5\.4)|(6\.\d+))"/>
         <sha256>b05c382c7260fddd94f979f831e935cced55c109ddd44d72e10fca752c16c639</sha256>
     </update>
 </updates>
