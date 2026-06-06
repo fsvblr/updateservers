@@ -40,7 +40,7 @@ jobs:
           update_element = None
           for update in root.findall('update'):
               element_tag = update.find('element')
-              if element_tag is not None and element_tag.text == lang:
+              if element_tag is not None and element_tag.text == f"pkg_quiztools_{lang}":
                   update_element = update
                   break
           
@@ -69,13 +69,13 @@ jobs:
               desc.text = f"{lang} translation for QuizTools package"
               
               elem = ET.SubElement(new_update, 'element')
-              elem.text = lang
+              elem.text = f"pkg_quiztools_{lang}"
               
               type_tag = ET.SubElement(new_update, 'type')
-              type_tag.text = "extension"
+              type_tag.text = "file"
               
               client = ET.SubElement(new_update, 'client')
-              client.text = "site"
+              client.text = "administrator"
               
               ver = ET.SubElement(new_update, 'version')
               ver.text = version
