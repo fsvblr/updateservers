@@ -2,7 +2,7 @@ name: Update QuizTools Language Server
 
 on:
   repository_dispatch:
-    types: [quiztools_language_updated] # Ловит событие из первого репозитория
+    types: [quiztools_language_updated] # Catches the event
 
 permissions:
   contents: write
@@ -24,7 +24,7 @@ jobs:
           import xml.etree.ElementTree as ET
           from xml.dom import minidom
 
-          # Данные, прилетевшие из первого репозитория
+          # Received data
           lang = "${{ github.event.client_payload.lang }}"
           version = "${{ github.event.client_payload.version }}"
           url = "${{ github.event.client_payload.url }}"
@@ -32,11 +32,11 @@ jobs:
 
           file_path = "quiztools-languages/quiztools-languages.xml"
           
-          # Читаем XML файл
+          # Reading an XML file
           tree = ET.parse(file_path)
           root = tree.getroot()
           
-          # Ищем существующий блок обновления для этого языка по тегу <element>
+          # Searching for an existing update block for this language using the <element> tag
           update_element = None
           for update in root.findall('update'):
               element_tag = update.find('element')
@@ -44,12 +44,12 @@ jobs:
                   update_element = update
                   break
           
-          # Если блок языка найден, обновляем его данные
+          # If a language block is found, update its data
           if update_element is not None:
               update_element.find('version').text = version
               update_element.find('downloads').find('downloadurl').text = url
               
-              # SHA-256 может отсутствовать при первой разметке, проверяем или создаем
+              # SHA-256 may be missing during the first markup, check or create
               sha_tag = update_element.find('sha256')
               if sha_tag is not None:
                   sha_tag.text = sha256
@@ -58,7 +58,7 @@ jobs:
                   new_sha.text = sha256
               print(f"Updated existing entry for {lang}")
           
-          # Если языка еще нет в XML, динамически создаем весь блок с нуля
+          # If the language is not yet in the XML, we dynamically create the entire block from scratch
           else:
               new_update = ET.SubElement(root, 'update')
               
@@ -88,17 +88,17 @@ jobs:
               tag = ET.SubElement(tags, 'tag')
               tag.text = "stable"
               
-              target = ET.SubElement(new_update, 'targetplatform', name="joomla", version="((5\\.4)|(6\.(0|1)))")
+              target = ET.SubElement(new_update, 'targetplatform', name="joomla", version="((5\.4)|(6\.\d+))")
               
               sha = ET.SubElement(new_update, 'sha256')
               sha.text = sha256
               print(f"Created new entry for {lang}")
 
-          # Сохраняем XML с красивыми отступами (Pretty Print)
+          # Saving XML with nice indents (Pretty Print)
           xml_str = ET.tostring(root, encoding='utf-8')
           parsed_str = minidom.parseString(xml_str)
           
-          # Убираем лишние пустые строки, которые может плодить minidom
+          # Removing extra empty lines that 'minidom' can produce
           pretty_xml = "\n".join([line for line in parsed_str.toprettyxml(indent="    ").splitlines() if line.strip()])
           
           with open(file_path, "w", encoding="utf-8") as f:
