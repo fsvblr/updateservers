@@ -72,7 +72,7 @@ jobs:
               elem.text = lang
               
               type_tag = ET.SubElement(new_update, 'type')
-              type_tag.text = "language"
+              type_tag.text = "extension"
               
               client = ET.SubElement(new_update, 'client')
               client.text = "site"
