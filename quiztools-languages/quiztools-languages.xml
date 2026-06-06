@@ -2,9 +2,9 @@
     <update>
         <name>QuizTools Language Pack - fr-FR</name>
         <description>fr-FR translation for QuizTools package</description>
-        <element>fr-FR</element>
+        <element>pkg_quiztools_fr-FR</element>
         <type>file</type>
-        <client>site</client>
+        <client>administrator</client>
         <version>2026.06.06.1712</version>
         <downloads>
             <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools-languages/releases/download/fr-FR-2026.06.06.1712/pkg_quiztools_fr-FR_2026.06.06.1712.zip</downloadurl>
