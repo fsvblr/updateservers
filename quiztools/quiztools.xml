@@ -11,7 +11,7 @@
         </downloads>
         <sha256>de5c7096129674e143b40f207e4e97488d264de02e945b96f7279eca81e248c3</sha256>
         <maintainerurl>https://github.com/fsvblr/quiztools</maintainerurl>
-        <targetplatform name="joomla" version="((5\.4)|(6\.\d+))" />
+        <targetplatform name="joomla" version="((5\.4)|(6\.(0|1)))" />
         <php_minimum>8.1</php_minimum>
         <changelogurl>https://raw.githubusercontent.com/fsvblr/quiztools/master/changelog.xml</changelogurl>
     </update>
