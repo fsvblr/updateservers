@@ -3,7 +3,7 @@
         <name>QuizTools Language Pack - fr-FR</name>
         <description>fr-FR translation for QuizTools package</description>
         <element>pkg_quiztools_fr-FR</element>
-        <type>file</type>
+        <type>language</type>
         <client>administrator</client>
         <version>2026.06.08.1215</version>
         <downloads>
