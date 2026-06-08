@@ -6,14 +6,14 @@
         <element>pkg_quiztools_fr-FR</element>
         <type>file</type>
         <client>site</client>
-        <version>2026.06.08.1651</version>
+        <version>2026.06.08.1653</version>
         <downloads>
-            <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools-languages/releases/download/fr-FR-2026.06.08.1651/pkg_quiztools_fr-FR_2026.06.08.1651.zip</downloadurl>
+            <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools-languages/releases/download/fr-FR-2026.06.08.1653/pkg_quiztools_fr-FR_2026.06.08.1653.zip</downloadurl>
         </downloads>
         <tags>
             <tag>stable</tag>
         </tags>
         <targetplatform name="joomla" version="((5\.4)|(6\.\d+))"/>
-        <sha256>44072d81bb862b7dfe8a69ecf3b89f82cc4259d5133656969dd177f9182c3cf9</sha256>
+        <sha256>8590a55ad8110cf784c865f05b26a6eef9233c5a769207abf7eda64c19333ad8</sha256>
     </update>
 </updates>
