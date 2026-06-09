@@ -48,7 +48,7 @@ jobs:
           if update_element is not None:
               update_element.find('version').text = version
               update_element.find('downloads').find('downloadurl').text = url
-              
+          
               # SHA-256 may be missing during the first markup, check or create
               sha_tag = update_element.find('sha256')
               if sha_tag is not None:
@@ -61,35 +61,35 @@ jobs:
           # If the language is not yet in the XML, we dynamically create the entire block from scratch
           else:
               new_update = ET.SubElement(root, 'update')
-              
+          
               name = ET.SubElement(new_update, 'name')
               name.text = f"QuizTools Language Pack - {lang}"
-              
+          
               desc = ET.SubElement(new_update, 'description')
               desc.text = f"{lang} translation for QuizTools package"
-              
+          
               elem = ET.SubElement(new_update, 'element')
               elem.text = f"pkg_quiztools_{lang}"
-              
+          
               type_tag = ET.SubElement(new_update, 'type')
               type_tag.text = "file"
-              
+          
               client = ET.SubElement(new_update, 'client')
               client.text = "site"
-              
+          
               ver = ET.SubElement(new_update, 'version')
               ver.text = version
-              
+          
               downloads = ET.SubElement(new_update, 'downloads')
               downloadurl = ET.SubElement(downloads, 'downloadurl', type="full", format="zip")
               downloadurl.text = url
-              
+          
               tags = ET.SubElement(new_update, 'tags')
               tag = ET.SubElement(tags, 'tag')
               tag.text = "stable"
-              
+          
               target = ET.SubElement(new_update, 'targetplatform', name="joomla", version="((5\.4)|(6\.\d+))")
-              
+          
               sha = ET.SubElement(new_update, 'sha256')
               sha.text = sha256
               print(f"Created new entry for {lang}")
@@ -108,6 +108,28 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
           git add quiztools-languages/quiztools-languages.xml
-          git commit -m "Automated update for language: ${{ github.event.client_payload.lang }} to v${{ github.event.client_payload.url }}" || echo "No changes to commit"
-          git push
+          git commit -m "Automated update for language: ${{ github.event.client_payload.lang }}" || echo "No changes to commit"
+          
+          # Submission cycle (max 5 attempts)
+          for i in {1..5}; do
+            echo "Attempt $i to push changes..."
+          
+            # Download neighbor's changes and roll our commit on top.
+            # The "-X theirs" strategy automatically resolves XML conflicts in favor of code changes, 
+            # preventing rebases from getting stuck due to simultaneous structure edits.
+            if git pull --rebase -X theirs origin master; then
+              if git push origin master; then
+                echo "Push successful on attempt $i!"
+                exit 0
+              fi
+            fi
+          
+            echo "Push failed or conflict occurred. Waiting before next attempt..."
+            # A random pause of 2 to 6 seconds to space out parallel processes over time
+            sleep $(( RANDOM % 5 + 2 ))
+          done
+          
+          echo "Failed to push changes after 5 attempts."
+          exit 1
