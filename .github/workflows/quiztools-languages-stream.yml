@@ -75,7 +75,7 @@ jobs:
               type_tag.text = "file"
               
               client = ET.SubElement(new_update, 'client')
-              client.text = "administrator"
+              client.text = "site"
               
               ver = ET.SubElement(new_update, 'version')
               ver.text = version
