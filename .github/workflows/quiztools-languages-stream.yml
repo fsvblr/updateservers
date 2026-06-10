@@ -22,7 +22,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Начните цикл попыток (до 5 раз).
+          lang="${{ github.event.client_payload.lang }}"
+          file_path="quiztools-languages/${lang}.xml"
+          
+          # Start a cycle of attempts (up to 5 times).
           for i in {1..5}; do
             echo "Attempt $i to process and push changes..."
           
@@ -39,17 +42,12 @@ jobs:
           version = "${{ github.event.client_payload.version }}"
           url = "${{ github.event.client_payload.url }}"
           sha256 = "${{ github.event.client_payload.sha256 }}"
-          file_path = "quiztools-languages/quiztools-languages.xml"
+          file_path = "${file_path}"
           
           tree = ET.parse(file_path)
           root = tree.getroot()
           
-          update_element = None
-          for update in root.findall('update'):
-              element_tag = update.find('element')
-              if element_tag is not None and element_tag.text == f"pkg_quiztools_{lang}":
-                  update_element = update
-                  break
+          update_element = root.find('update')
           
           if update_element is not None:
               update_element.find('version').text = version
@@ -60,42 +58,28 @@ jobs:
               else:
                   new_sha = ET.SubElement(update_element, 'sha256')
                   new_sha.text = sha256
-              print(f"Updated existing entry for {lang}")
+              print(f"Updated entry for {lang} in {file_path}")
           else:
-              new_update = ET.SubElement(root, 'update')
-              name = ET.SubElement(new_update, 'name')
-              name.text = f"QuizTools Language Pack - {lang}"
-              desc = ET.SubElement(new_update, 'description')
-              desc.text = f"{lang} translation for QuizTools package"
-              elem = ET.SubElement(new_update, 'element')
-              elem.text = f"pkg_quiztools_{lang}"
-              type_tag = ET.SubElement(new_update, 'type')
-              type_tag.text = "file"
-              client = ET.SubElement(new_update, 'client')
-              client.text = "site"
-              ver = ET.SubElement(new_update, 'version')
-              ver.text = version
-              downloads = ET.SubElement(new_update, 'downloads')
-              downloadurl = ET.SubElement(downloads, 'downloadurl', type="full", format="zip")
-              downloadurl.text = url
-              tags = ET.SubElement(new_update, 'tags')
-              tag = ET.SubElement(tags, 'tag')
-              tag.text = "stable"
-              target = ET.SubElement(new_update, 'targetplatform', name="joomla", version="((5\.4)|(6\.\d+))")
-              sha = ET.SubElement(new_update, 'sha256')
-              sha.text = sha256
-              print(f"Created new entry for {lang}")
+              print(f"Error: <update> tag not found in {file_path}")
+              exit(1)
           
           xml_str = ET.tostring(root, encoding='utf-8')
           parsed_str = minidom.parseString(xml_str)
-          pretty_xml = "\n".join([line for line in parsed_str.toprettyxml(indent="    ").splitlines() if line.strip()])
+          
+          # Format the XML and completely remove the line with the declaration <?xml ... ?>
+          lines = [line for line in parsed_str.toprettyxml(indent="    ").splitlines() if line.strip()]
+          if lines and lines[0].startswith("<?xml"):
+              lines.pop(0)
+          
+          pretty_xml = "\n".join(lines)
           
           with open(file_path, "w", encoding="utf-8") as f:
               f.write(pretty_xml)
           EOF
           
             # Trying to commit and send the data.
-            git add quiztools-languages/quiztools-languages.xml
+            git add "$file_path"
+          
             # Commit only if the file has actually changed.
             if git diff --cached --quiet; then
               echo "No changes detected in XML for $lang. Skipping push."
