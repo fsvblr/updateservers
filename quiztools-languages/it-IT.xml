@@ -1,0 +1,18 @@
+<updates>
+    <update>
+        <name>QuizTools Language Pack - it-IT</name>
+        <description>it-IT translation for QuizTools package</description>
+        <element>pkg_quiztools_it-IT</element>
+        <type>file</type>
+        <client>site</client>
+        <version>2026.01.01.0001</version>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/fsvblr/quiztools-languages/releases/download/it-IT-2026.01.01.0001/pkg_quiztools_it-IT_2026.01.01.0001.zip</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <targetplatform name="joomla" version="((5\.4)|(6\.\d+))"/>
+        <sha256>09790fc9dd4b18645003027b0fd20f946592cdb3c708fca891d16d7fe2591ff7</sha256>
+    </update>
+</updates>
